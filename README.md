@@ -56,6 +56,7 @@ This project was built for simple embedding of assets and as such, there are a n
 - Mewn just deals with bytes. It's up to you to convert that to something you need. One exception: String. Just because it's super likely you'll need it. 
 - Paths to assets need to be unique. If you try to access 2 files with the same relative path, it isn't going to work.
 - It is _extremely_ unlikely that any new features will be added in the future. This is by choice, not necessity. I want this project to be extremely stable so if you choose to use it today, it should work exactly the same in 3 years time. If it doesn't currently do what you want, you are probably looking for a different project.
+- The project works by parsing the AST tree of your code. It works when you use `mydata := mewn.String('./myfile.txt')` to import your data. It may not (yet) work for similar code. Very happy to receive bug fixes if it doesn't.
 
 Bug reports are _very_ welcome! Almost as much as PRs to fix them!
 
