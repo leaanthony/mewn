@@ -65,7 +65,7 @@ Bug reports are _very_ welcome! Almost as much as PRs to fix them!
 
 ## What does 'Mewn' mean?
 
-Mewn (mare-oon as fast as you can say it, not meee-oon) is the [Welsh](https://en.wikipedia.org/wiki/Welsh_language) word for "in".
+Mewn (MEH-OON as fast as you can say it, not meee-oon) is the [Welsh](https://en.wikipedia.org/wiki/Welsh_language) word for "in".
 
 ## Why go for a crazy Welsh name?
 
