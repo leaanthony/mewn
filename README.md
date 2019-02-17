@@ -46,3 +46,11 @@ Bug reports are _very_ welcome! Almost as much as PRs to fix them!
 ## What does 'Mewn' mean?
 
 Mewn (mare-oon as fast as you can say it, not meee-oon) is the [Welsh](https://en.wikipedia.org/wiki/Welsh_language) word for "in".
+
+## Why go for a crazy Welsh name?
+
+Well, it stands out as a project name (practically zero name clashes), Welsh is one of the oldest and coolest languages in Europe and I speak it. JRR Tolkien (heard of him?) was [obsessed with Welsh](http://www.bbc.co.uk/guides/z2hthyc). So much so, he based the Middle Earth language "Sindarin" on it and there's strong evidence he based LOTR on Welsh mythology. Yeah. And it's associated with Red Dragons. And it's on Duolingo 😉.
+
+## Inspiration
+
+Heavy inspiration was drawn from [packr](https://github.com/gobuffalo/packr) by the awesome Mark Bates. The scope of what I needed was far narrower than the packr project, thus Mewn was born. If Mewn doesn't fulfil your needs, it's likely that packr will.
