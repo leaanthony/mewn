@@ -2,6 +2,8 @@
 
 A zero dependency asset embedder.
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/leaanthony/mewn)](https://goreportcard.com/report/github.com/leaanthony/mewn)  [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/leaanthony/mewn) [![CodeFactor](https://www.codefactor.io/repository/github/leaanthony/mewn/badge)](https://www.codefactor.io/repository/github/leaanthony/mewn) ![](https://img.shields.io/bower/l/svg) [![cover.run]
+
 ## About
 
 Mewn is perhaps the easiest way to embed assets in a Go program. Here is an example:
