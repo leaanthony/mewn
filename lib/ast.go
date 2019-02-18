@@ -46,25 +46,28 @@ func GetReferencedAssets(filenames []string) ([]*ReferencedAssets, error) {
 			case *ast.CallExpr:
 				// fmt.Printf("Call Expr = %#v\n", x)
 				// fmt.Printf("Selector = %+v\n", x.Fun)
-				fn := x.Fun.(*ast.SelectorExpr)
-				// fmt.Printf("x = %#v\n", fn.X)
-				switch y := fn.X.(type) {
-				case *ast.Ident:
-					// fmt.Printf("Ident name = " + y.Name)
-					if y.Name == "mewn" {
-						if len(x.Args) == 1 {
-							switch y := x.Args[0].(type) {
-							case *ast.BasicLit:
-								// fmt.Printf("argname = %s\n", y.Value)
-								referencedFile := strings.Replace(y.Value, "\"", "", -1)
-								// Get full asset filename
-								baseDir := filepath.Dir(filename)
-								assetFile, err := filepath.Abs(filepath.Join(baseDir, referencedFile))
-								if err != nil {
-									log.Fatal(err)
+				switch x.Fun.(type) {
+				case *ast.SelectorExpr:
+					fn := x.Fun.(*ast.SelectorExpr)
+					// fmt.Printf("x = %#v\n", fn.X)
+					switch y := fn.X.(type) {
+					case *ast.Ident:
+						// fmt.Printf("Ident name = " + y.Name)
+						if y.Name == "mewn" {
+							if len(x.Args) == 1 {
+								switch y := x.Args[0].(type) {
+								case *ast.BasicLit:
+									// fmt.Printf("argname = %s\n", y.Value)
+									referencedFile := strings.Replace(y.Value, "\"", "", -1)
+									// Get full asset filename
+									baseDir := filepath.Dir(filename)
+									assetFile, err := filepath.Abs(filepath.Join(baseDir, referencedFile))
+									if err != nil {
+										log.Fatal(err)
+									}
+									thisAsset := &ReferencedAsset{Name: referencedFile, AssetPath: assetFile}
+									thisAssetBundle.Assets = append(thisAssetBundle.Assets, thisAsset)
 								}
-								thisAsset := &ReferencedAsset{Name: referencedFile, AssetPath: assetFile}
-								thisAssetBundle.Assets = append(thisAssetBundle.Assets, thisAsset)
 							}
 						}
 					}
