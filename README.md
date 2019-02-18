@@ -5,7 +5,7 @@ A zero dependency asset embedder for Go.
 [![Go Report Card](https://goreportcard.com/badge/github.com/leaanthony/mewn)](https://goreportcard.com/report/github.com/leaanthony/mewn) [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/leaanthony/mewn) [![CodeFactor](https://www.codefactor.io/repository/github/leaanthony/mewn/badge)](https://www.codefactor.io/repository/github/leaanthony/mewn) ![](https://img.shields.io/bower/l/svg)
 [![Generic badge](https://img.shields.io/badge/MacOS-Supported-Green.svg?style=flat)](https://github.com/leaanthony/mewn/)
 [![Generic badge](https://img.shields.io/badge/Linux-Supported-Green.svg?style=flat)](https://github.com/leaanthony/mewn/)
-[![Generic badge](https://img.shields.io/badge/Windows-Untested-Orange.svg?style=flat)](https://github.com/leaanthony/mewn/)
+[![Generic badge](https://img.shields.io/badge/Windows-Supported-Green.svg?style=flat)](https://github.com/leaanthony/mewn/)
 
 ## About
 
