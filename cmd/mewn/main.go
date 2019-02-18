@@ -38,7 +38,7 @@ func main() {
 
 	for _, referencedAsset := range referencedAssets {
 		packfileData := lib.GeneratePackFileString(referencedAsset)
-		targetFile := referencedAsset.Caller[:len(referencedAsset.Caller)-3] + "-mewn.go"
+		targetFile := referencedAsset.PackageName + "-mewn.go"
 		targetFiles = append(targetFiles, targetFile)
 		ioutil.WriteFile(targetFile, []byte(packfileData), 0644)
 	}

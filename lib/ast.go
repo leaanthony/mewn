@@ -20,13 +20,26 @@ type ReferencedAsset struct {
 type ReferencedAssets struct {
 	Caller      string
 	PackageName string
+	BaseDir     string
 	Assets      []*ReferencedAsset
+}
+
+// HasAsset returns true if the given asset name has already been processed
+// for this asset group
+func (r *ReferencedAssets) HasAsset(name string) bool {
+	for _, asset := range r.Assets {
+		if asset.Name == name {
+			return true
+		}
+	}
+	return false
 }
 
 // GetReferencedAssets gets a list of referenced assets from the AST
 func GetReferencedAssets(filenames []string) ([]*ReferencedAssets, error) {
 
 	var result []*ReferencedAssets
+	assetMap := make(map[string]*ReferencedAssets)
 
 	for _, filename := range filenames {
 		fset := token.NewFileSet()
@@ -36,7 +49,14 @@ func GetReferencedAssets(filenames []string) ([]*ReferencedAssets, error) {
 		}
 
 		var packageName string
-		var thisAssetBundle = &ReferencedAssets{Caller: filename}
+
+		// Normalise per directory imports
+		var baseDir = filepath.Dir(filename)
+		var thisAssetBundle = assetMap[baseDir]
+		if thisAssetBundle == nil {
+			thisAssetBundle = &ReferencedAssets{Caller: filename, BaseDir: baseDir}
+			assetMap[baseDir] = thisAssetBundle
+		}
 
 		ast.Inspect(node, func(node ast.Node) bool {
 			switch x := node.(type) {
@@ -59,14 +79,18 @@ func GetReferencedAssets(filenames []string) ([]*ReferencedAssets, error) {
 								case *ast.BasicLit:
 									// fmt.Printf("argname = %s\n", y.Value)
 									referencedFile := strings.Replace(y.Value, "\"", "", -1)
-									// Get full asset filename
-									baseDir := filepath.Dir(filename)
-									assetFile, err := filepath.Abs(filepath.Join(baseDir, referencedFile))
-									if err != nil {
-										log.Fatal(err)
+
+									// Only add the asset once
+									if !thisAssetBundle.HasAsset(referencedFile) {
+										// Get full asset filename
+										baseDir := filepath.Dir(filename)
+										assetFile, err := filepath.Abs(filepath.Join(baseDir, referencedFile))
+										if err != nil {
+											log.Fatal(err)
+										}
+										thisAsset := &ReferencedAsset{Name: referencedFile, AssetPath: assetFile}
+										thisAssetBundle.Assets = append(thisAssetBundle.Assets, thisAsset)
 									}
-									thisAsset := &ReferencedAsset{Name: referencedFile, AssetPath: assetFile}
-									thisAssetBundle.Assets = append(thisAssetBundle.Assets, thisAsset)
 								}
 							}
 						}
