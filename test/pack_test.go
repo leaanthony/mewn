@@ -1,7 +1,10 @@
 package test
 
 import (
+	"bytes"
+	"fmt"
 	"io/ioutil"
+	"runtime"
 	"testing"
 
 	"github.com/leaanthony/mewn/lib"
@@ -28,7 +31,15 @@ func TestPacking(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	// Fix line endings for fixture
+	if runtime.GOOS == "windows" {
+		fixture = bytes.Replace(fixture, []byte{13, 10}, []byte{10}, -1)
+	}
+
 	if string(fixture) != packedFileString {
+		fmt.Println(string(fixture))
+		fmt.Println(packedFileString)
 		t.Fail()
 	}
 }
