@@ -14,7 +14,7 @@ func main() {
 
 	buildMode := ""
 
-	mewnFiles := []string{}
+	var mewnFiles []string
 	inputs := []string{}
 	if len(os.Args) > 1 {
 		if os.Args[1] == "build" || os.Args[1] == "pack" {

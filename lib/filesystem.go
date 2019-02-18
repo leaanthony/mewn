@@ -94,6 +94,7 @@ func HasMewnReference(filename string) (bool, error) {
 	return false, nil
 }
 
+// GetMewnFiles returns a list of files referencing mewn assets
 func GetMewnFiles(args ...string) []string {
 
 	var goFiles []string
