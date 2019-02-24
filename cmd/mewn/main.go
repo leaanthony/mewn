@@ -10,8 +10,13 @@ import (
 	"github.com/leaanthony/mewn/lib"
 )
 
+var version = "unreleased"
+var commit = "N/A"
+var date = "N/A"
+
 func main() {
 
+	fmt.Printf("Mewn v%s (%s - %s)", version, commit, date)
 	buildMode := ""
 
 	var mewnFiles []string
