@@ -10,8 +10,18 @@ import (
 	"github.com/leaanthony/mewn/lib"
 )
 
+var version = "0.0.0"
+var commit = ""
+var date = "Now"
+
 func main() {
 
+	message := "[dev build]"
+	if len(commit) > 5 {
+		message = fmt.Sprintf("v%s (%s - %s)", version, commit[0:5], date)
+	}
+
+	fmt.Printf("Mewn %s\n", message)
 	buildMode := ""
 
 	var mewnFiles []string
