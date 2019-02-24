@@ -4,18 +4,19 @@ import (
 	"io/ioutil"
 	"log"
 	"path/filepath"
+	"reflect"
 	"runtime"
 
 	"github.com/leaanthony/mewn/lib"
 )
 
-// AssetDirectory stores all the assets
-var AssetDirectory = make(map[string]string)
+// assetDirectory stores all the assets
+var assetDirectory = make(map[string]string)
 
 // loadAsset loads the asset for the given filename
 func loadAsset(filename string) ([]byte, error) {
 	// Check internal
-	storedAsset := AssetDirectory[filename]
+	storedAsset := assetDirectory[filename]
 	if storedAsset != "" {
 		return lib.DecompressHexString(storedAsset)
 	}
@@ -62,4 +63,25 @@ func MustBytes(filename string) []byte {
 		log.Fatalf("The asset '%s' was not found! Aborting!", filename)
 	}
 	return contents
+}
+
+func AddFile(key string, value string) {
+	_, exists := assetDirectory[key]
+	if exists {
+		log.Fatalf("Key '%s' already registered", key)
+	}
+	assetDirectory[key] = value
+}
+
+func Entries() []string {
+	keys := reflect.ValueOf(assetDirectory).MapKeys()
+	result := []string{}
+	for _, key := range keys {
+		result = append(result, key.String())
+	}
+	return result
+}
+
+func Reset() {
+	assetDirectory = make(map[string]string)
 }

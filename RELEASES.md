@@ -1,5 +1,11 @@
 # Releases
 
+
+v0.9.2 - 24th Feb 2019
+
+ - Added Entries() to get file list
+ - Updated generated code + tests
+
 v0.9.1 - 18th Feb 2019
 
 - Create single pack file per package
