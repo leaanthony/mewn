@@ -17,7 +17,7 @@ func GeneratePackFileString(assetBundle *ReferencedAssets) string {
 		if err != nil {
 			log.Fatal(err)
 		}
-		result += fmt.Sprintf("  mewn.AssetDirectory[\"%s\"] = \"%s\"\n", asset.Name, packedData)
+		result += fmt.Sprintf("  mewn.AddAsset(\"%s\",\"%s\",\"%s\")\n", assetBundle.GroupName, asset.Name, packedData)
 	}
 	result += "}\n"
 

@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"fmt"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -21,6 +22,7 @@ type ReferencedAssets struct {
 	Caller      string
 	PackageName string
 	BaseDir     string
+	GroupName   string
 	Assets      []*ReferencedAsset
 }
 
@@ -59,37 +61,57 @@ func GetReferencedAssets(filenames []string) ([]*ReferencedAssets, error) {
 		}
 
 		ast.Inspect(node, func(node ast.Node) bool {
-			switch x := node.(type) {
+			switch nodeType := node.(type) {
 			case *ast.File:
-				packageName = x.Name.Name
+				packageName = nodeType.Name.Name
 				thisAssetBundle.PackageName = packageName
-			case *ast.CallExpr:
-				// fmt.Printf("Call Expr = %#v\n", x)
-				// fmt.Printf("Selector = %+v\n", x.Fun)
-				switch x.Fun.(type) {
-				case *ast.SelectorExpr:
-					fn := x.Fun.(*ast.SelectorExpr)
-					// fmt.Printf("x = %#v\n", fn.X)
-					switch y := fn.X.(type) {
-					case *ast.Ident:
-						// fmt.Printf("Ident name = " + y.Name)
-						if y.Name == "mewn" {
-							if len(x.Args) == 1 {
-								switch y := x.Args[0].(type) {
-								case *ast.BasicLit:
-									// fmt.Printf("argname = %s\n", y.Value)
-									referencedFile := strings.Replace(y.Value, "\"", "", -1)
-
-									// Only add the asset once
-									if !thisAssetBundle.HasAsset(referencedFile) {
-										// Get full asset filename
-										baseDir := filepath.Dir(filename)
-										assetFile, err := filepath.Abs(filepath.Join(baseDir, referencedFile))
-										if err != nil {
-											log.Fatal(err)
+				thisAssetBundle.GroupName = "/"
+			case *ast.AssignStmt:
+				fmt.Printf("Ass Stmt = %#v\n", nodeType)
+				for _, rhs := range nodeType.Rhs {
+					switch rhsAssignment := rhs.(type) {
+					case *ast.CallExpr:
+						fmt.Printf("Call Expr = %#v\n", rhsAssignment)
+						// fmt.Printf("Selector = %+v\n", x.Fun)
+						switch funcType := rhsAssignment.Fun.(type) {
+						case *ast.SelectorExpr:
+							fmt.Printf("x = %#v\n", funcType.X)
+							switch y := funcType.X.(type) {
+							case *ast.Ident:
+								fmt.Println("Ident name = " + y.Name)
+								if y.Name == "mewn" {
+									fmt.Printf("fn.sel = %#v\n", funcType.Sel)
+									switch funcType.Sel.Name {
+									case "Group":
+										// Do group shit
+										fmt.Printf("Process group: %#v\n", nodeType.Lhs)
+										if len(nodeType.Lhs) == 1 {
+											switch lhs := nodeType.Lhs[0].(type) {
+											case *ast.Ident:
+												fmt.Printf("GROUPNAME = %#v\n", lhs.Name)
+											}
 										}
-										thisAsset := &ReferencedAsset{Name: referencedFile, AssetPath: assetFile}
-										thisAssetBundle.Assets = append(thisAssetBundle.Assets, thisAsset)
+
+									default:
+										if len(rhsAssignment.Args) == 1 {
+											switch y := rhsAssignment.Args[0].(type) {
+											case *ast.BasicLit:
+												fmt.Printf("argname = %s\n", y.Value)
+												referencedFile := strings.Replace(y.Value, "\"", "", -1)
+
+												// Only add the asset once
+												if !thisAssetBundle.HasAsset(referencedFile) {
+													// Get full asset filename
+													baseDir := filepath.Dir(filename)
+													assetFile, err := filepath.Abs(filepath.Join(baseDir, referencedFile))
+													if err != nil {
+														log.Fatal(err)
+													}
+													thisAsset := &ReferencedAsset{Name: referencedFile, AssetPath: assetFile}
+													thisAssetBundle.Assets = append(thisAssetBundle.Assets, thisAsset)
+												}
+											}
+										}
 									}
 								}
 							}
