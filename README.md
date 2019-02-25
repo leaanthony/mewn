@@ -85,7 +85,7 @@ Mewn (MEH-OON as fast as you can say it, not meee-oon) is the [Welsh](https://en
 
 ## Why go for a crazy Welsh name?
 
-Well, it stands out as a project name (practically zero name clashes) and is one of the oldest and coolest languages in Europe (which I'm lucky enough to speak). JRR Tolkien was [obsessed with Welsh](http://www.bbc.co.uk/guides/z2hthyc). So much so, he based the Middle Earth Elvish language "Sindarin" on it and there's strong evidence he based LOTR on Welsh mythology. It's also associated with [Red Dragons](https://en.wikipedia.org/wiki/Flag_of_Wales), and weirdly loved by the Bundesliga football team [FC Schalke](https://twitter.com/s04_us). It's on [Duolingo](https://www.duolingo.com/course/cy/en/Learn-Welsh), so why not give it a go 😉.
+Well, it stands out as a project name (practically zero name clashes) and is one of the oldest and coolest languages in Europe (which I'm lucky enough to speak). JRR Tolkien was [obsessed with Welsh](http://www.bbc.co.uk/guides/z2hthyc). So much so, he based the Middle Earth Elvish language "Sindarin" on it and there's strong evidence he based LOTR on Welsh mythology. It's also associated with [Red Dragons](https://en.wikipedia.org/wiki/Flag_of_Wales), weirdly loved by the Bundesliga football team [FC Schalke](https://twitter.com/s04_us) and it's on [Duolingo](https://www.duolingo.com/course/cy/en/Learn-Welsh), so why not give it a go 😉.
 
 ## Inspiration
 
