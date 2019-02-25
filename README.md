@@ -37,10 +37,25 @@ If compiled with `mewn build`, it will embed the assets into the resultant binar
 
 Import mewn at the top of your file `github.com/leaanthony/mewn` then use the simple API to load assets:
 
-- String(filename) (string) - loads the file and returns it as a string
-- Bytes(filename) ([]byte) - loads the file and returns it as a byte slice
-- MustString(filename) (string, error) - loads the file and returns it as a string. Error indicates an issue
-- MustBytes(filename) ([]byte, error) - loads the file and returns it as a byte slice. Error indicates an issue
+- `String(filename) (string)` - loads the file and returns it as a string
+- `Bytes(filename) ([]byte)` - loads the file and returns it as a byte slice
+- `MustString(filename) (string, error)` - loads the file and returns it as a string. Error indicates an issue
+- `MustBytes(filename) ([]byte, error)` - loads the file and returns it as a byte slice. Error indicates an issue
+
+### Groups
+
+To bundle a whole directory, simply declare a group like this:
+
+`myGroup := mewn.Group("./path/to/dir")`
+
+From this point you can use the same methods above, but on the group:
+
+`myAsset := myGroup.String("file.txt")`
+
+Groups also have the following method:
+
+  - `Entries() []string` - Returns a slice of filenames in the Group
+
 
 ## Mewn cli command
 
@@ -57,9 +72,10 @@ For the `build` and `pack` subcommands, any other cli parameters will be passed 
 This project was built for simple embedding of assets and as such, there are a number of things to consider when choosing whether or not to use it.
 
 - Mewn just deals with bytes. It's up to you to convert that to something you need. One exception: String. Just because it's super likely you'll need it.
-- Paths to assets need to be unique. If you try to access 2 files with the same relative path, it isn't going to work.
-- It is _extremely_ unlikely that any new features will be added in the future. This is by choice, not necessity. I want this project to be extremely stable so if you choose to use it today, it should work exactly the same in 3 years time. If it doesn't currently do what you want, you are probably looking for a different project.
-- The project works by parsing the AST tree of your code. It works when you use `mydata := mewn.String('./myfile.txt')` to import your data (IE string literal, not variable). It may not (yet) work for similar code. Very happy to receive bug fixes if it doesn't.
+- When using the top-level methods, EG: mewn.String(), it uses a default group called ".". Creating your own group called "." shouldn't do anything, but I'm not going to guarrantee it. You've been warned 😉
+- Paths to assets need to be unique (within a Group). If you try to pack 2 files with the same relative path with the same group (or default group), it isn't going to work. 
+- Once this project reaches 1.0, it is _extremely_ unlikely that any new features will be added in the future. This is by choice, not necessity. I want this project to be extremely stable so if you choose to use it today, it should work exactly the same in 3 years time. If it doesn't currently do what you want, you are probably looking for a different project. However, if you have a phenomenally good idea, feel free to open an issue.
+- The project works by parsing the AST tree of your code. It works when you use the form `mydata := mewn.String('./myfile.txt')` to import your data (IE string literal, not variable). It may not (yet) work for similar code. Very happy to receive bug fixes if it doesn't.
 
 Bug reports are _very_ welcome! Almost as much as PRs to fix them!
 
@@ -69,7 +85,7 @@ Mewn (MEH-OON as fast as you can say it, not meee-oon) is the [Welsh](https://en
 
 ## Why go for a crazy Welsh name?
 
-Well, it stands out as a project name (practically zero name clashes), Welsh is one of the oldest and coolest languages in Europe and I speak it. JRR Tolkien (heard of him?) was [obsessed with Welsh](http://www.bbc.co.uk/guides/z2hthyc). So much so, he based the Middle Earth language "Sindarin" on it and there's strong evidence he based LOTR on Welsh mythology. Yeah. And it's associated with Red Dragons. And it's on Duolingo 😉.
+Well, it stands out as a project name (practically zero name clashes) and is one of the oldest and coolest languages in Europe (which I'm lucky enough to speak). JRR Tolkien was [obsessed with Welsh](http://www.bbc.co.uk/guides/z2hthyc). So much so, he based the Middle Earth Elvish language "Sindarin" on it and there's strong evidence he based LOTR on Welsh mythology. It's also associated with [Red Dragons](https://en.wikipedia.org/wiki/Flag_of_Wales), and weirdly loved by the Bundesliga football team [FC Schalke](https://twitter.com/s04_us). It's on [Duolingo](https://www.duolingo.com/course/cy/en/Learn-Welsh), so why not give it a go 😉.
 
 ## Inspiration
 
