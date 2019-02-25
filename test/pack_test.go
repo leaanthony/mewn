@@ -26,7 +26,10 @@ func TestPacking(t *testing.T) {
 	}
 
 	theAsset := referencedAssets[0]
-	packedFileString := lib.GeneratePackFileString(theAsset)
+	packedFileString, err := lib.GeneratePackFileString(theAsset)
+	if err != nil {
+		t.Fatal(err)
+	}
 	fixture, err := ioutil.ReadFile("./fixtures/example.go.txt")
 	if err != nil {
 		t.Fatal(err)

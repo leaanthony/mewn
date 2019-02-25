@@ -1,87 +1,75 @@
 package mewn
 
 import (
-	"io/ioutil"
+	"fmt"
 	"log"
-	"path/filepath"
-	"reflect"
-	"runtime"
 
 	"github.com/leaanthony/mewn/lib"
 )
 
-// assetDirectory stores all the assets
-var assetDirectory = make(map[string]string)
+// mainAssetDirectory stores all the assets
+var mainAssetDirectory = lib.NewAssetDirectory()
+var rootFileGroup *lib.FileGroup
+var err error
 
-// loadAsset loads the asset for the given filename
-func loadAsset(filename string) ([]byte, error) {
-	// Check internal
-	storedAsset := assetDirectory[filename]
-	if storedAsset != "" {
-		return lib.DecompressHexString(storedAsset)
-	}
-	// Get caller directory
-	_, file, _, _ := runtime.Caller(1)
-	callerDir := filepath.Dir(file)
-
-	// Calculate full path
-	fullFilePath := filepath.Join(callerDir, filename)
-	return ioutil.ReadFile(fullFilePath)
-}
-
-// String returns the asset as a string
-// Failure is indicated by a blank string.
-// If you need hard failures, use MustString.
-func String(filename string) string {
-	contents, _ := loadAsset(filename)
-	return string(contents)
-}
-
-// Bytes returns the asset as a Byte slice.
-// Failure is indicated by a blank slice.
-// If you need hard failures, use MustBytes.
-func Bytes(filename string) []byte {
-	contents, _ := loadAsset(filename)
-	return contents
-}
-
-// MustString returns the asset as a string.
-// If the asset doesn't exist, it hard fails
-func MustString(filename string) string {
-	contents, err := loadAsset(filename)
+func init() {
+	rootFileGroup, err = mainAssetDirectory.NewFileGroup(".")
 	if err != nil {
-		log.Fatalf("The asset '%s' was not found! Aborting!", filename)
+		log.Fatal(err)
 	}
-	return string(contents)
 }
 
-// MustBytes returns the asset as a string.
-// If the asset doesn't exist, it hard fails
-func MustBytes(filename string) []byte {
-	contents, err := loadAsset(filename)
-	if err != nil {
-		log.Fatalf("The asset '%s' was not found! Aborting!", filename)
-	}
-	return contents
+// String gets the asset value by name
+func String(name string) string {
+	return rootFileGroup.String(name)
 }
 
-func AddFile(key string, value string) {
-	_, exists := assetDirectory[key]
-	if exists {
-		log.Fatalf("Key '%s' already registered", key)
-	}
-	assetDirectory[key] = value
+// MustString gets the asset value by name
+func MustString(name string) string {
+	return rootFileGroup.MustString(name)
 }
 
+// Bytes gets the asset value by name
+func Bytes(name string) []byte {
+	return rootFileGroup.Bytes(name)
+}
+
+// MustBytes gets the asset value by name
+func MustBytes(name string) []byte {
+	return rootFileGroup.MustBytes(name)
+}
+
+// AddAsset adds the given asset to the root context
+func AddAsset(groupName, name, value string) {
+	fileGroup := mainAssetDirectory.GetGroup(groupName)
+	if fileGroup == nil {
+		fileGroup, err = mainAssetDirectory.NewFileGroup(groupName)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	fileGroup.AddAsset(name, value)
+}
+
+// Entries returns the file entries as a slice of filenames
 func Entries() []string {
-	keys := reflect.ValueOf(assetDirectory).MapKeys()
-	result := []string{}
-	for _, key := range keys {
-		result = append(result, key.String())
+	return rootFileGroup.Entries()
+}
+
+// Reset clears the file entries
+func Reset() {
+	rootFileGroup.Reset()
+}
+
+// Group holds a group of assets
+func Group(name string) *lib.FileGroup {
+	result := mainAssetDirectory.GetGroup(name)
+	if result == nil {
+		result, err = mainAssetDirectory.NewFileGroup(name)
+		if err != nil {
+			fmt.Println("64")
+			log.Fatal(err.Error())
+		}
 	}
 	return result
-}
-
-func Reset() {
-	assetDirectory = make(map[string]string)
 }

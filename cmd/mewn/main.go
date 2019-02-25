@@ -41,13 +41,18 @@ func main() {
 	}
 	referencedAssets, err := lib.GetReferencedAssets(mewnFiles)
 	if err != nil {
+		fmt.Println("44")
 		log.Fatal(err)
 	}
 
 	targetFiles := []string{}
 
 	for _, referencedAsset := range referencedAssets {
-		packfileData := lib.GeneratePackFileString(referencedAsset)
+		packfileData, err := lib.GeneratePackFileString(referencedAsset)
+		if err != nil {
+			fmt.Println(53)
+			log.Fatal(err)
+		}
 		targetFile := referencedAsset.PackageName + "-mewn.go"
 		targetFiles = append(targetFiles, targetFile)
 		ioutil.WriteFile(targetFile, []byte(packfileData), 0644)
@@ -76,6 +81,8 @@ func main() {
 		for _, filename := range targetFiles {
 			err := os.Remove(filename)
 			if err != nil {
+				fmt.Println("81")
+
 				log.Fatal(err)
 			}
 		}
