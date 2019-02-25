@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/leaanthony/mewn/lib"
 )
@@ -53,7 +54,7 @@ func main() {
 			fmt.Println(53)
 			log.Fatal(err)
 		}
-		targetFile := referencedAsset.PackageName + "-mewn.go"
+		targetFile := filepath.Join(referencedAsset.BaseDir, referencedAsset.PackageName+"-mewn.go")
 		targetFiles = append(targetFiles, targetFile)
 		ioutil.WriteFile(targetFile, []byte(packfileData), 0644)
 	}
