@@ -3,5 +3,5 @@ package test
 
 import "github.com/leaanthony/mewn"
 func init() {
-  mewn.AddFile("./assets/hello.txt","1f8b08000000000000fff248cdc9c95728c9482d4a5504040000ffff36675ced0c000000")
+  mewn.AddAsset(".","./assets/hello.txt","1f8b08000000000000fff248cdc9c95728c9482d4a5504040000ffff36675ced0c000000")
 }

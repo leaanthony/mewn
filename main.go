@@ -1,16 +1,19 @@
 package mewn
 
 import (
+	"fmt"
 	"log"
+
+	"github.com/leaanthony/mewn/lib"
 )
 
-// assetDirectory stores all the assets
-var assetDirectory = NewAssetDirectory()
-var rootFileGroup *FileGroup
+// mainAssetDirectory stores all the assets
+var mainAssetDirectory = lib.NewAssetDirectory()
+var rootFileGroup *lib.FileGroup
 var err error
 
 func init() {
-	rootFileGroup, err = assetDirectory.NewFileGroup(".")
+	rootFileGroup, err = mainAssetDirectory.NewFileGroup(".")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -37,8 +40,15 @@ func MustBytes(name string) []byte {
 }
 
 // AddAsset adds the given asset to the root context
-func AddAsset(name, value string) {
-	rootFileGroup.AddAsset(name, value)
+func AddAsset(groupName, name, value string) {
+	fileGroup := mainAssetDirectory.GetGroup(groupName)
+	if fileGroup == nil {
+		fileGroup, err = mainAssetDirectory.NewFileGroup(groupName)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	fileGroup.AddAsset(name, value)
 }
 
 // Entries returns the file entries as a slice of filenames
@@ -49,4 +59,17 @@ func Entries() []string {
 // Reset clears the file entries
 func Reset() {
 	rootFileGroup.Reset()
+}
+
+// Group holds a group of assets
+func Group(name string) *lib.FileGroup {
+	result := mainAssetDirectory.GetGroup(name)
+	if result == nil {
+		result, err = mainAssetDirectory.NewFileGroup(name)
+		if err != nil {
+			fmt.Println("64")
+			log.Fatal(err.Error())
+		}
+	}
+	return result
 }
