@@ -46,3 +46,46 @@ func TestPacking(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestEmptyPack(t *testing.T) {
+	mewnFiles := lib.GetMewnFiles("empty.go")
+	if len(mewnFiles) != 0 {
+		t.Fail()
+		return
+	}
+
+	referencedAssets, err := lib.GetReferencedAssets(mewnFiles)
+	if err != nil {
+		t.Fail()
+		return
+	}
+
+	if len(referencedAssets) != 0 {
+		t.Fail()
+		return
+	}
+
+	// No referenced assets so makedummy empty structure
+	referencedAsset := &lib.ReferencedAssets{PackageName: "test"}
+
+	packedFileString, err := lib.GeneratePackFileString(referencedAsset)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fixture, err := ioutil.ReadFile("./fixtures/empty.go.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Fix line endings for fixture
+	if runtime.GOOS == "windows" {
+		fixture = bytes.Replace(fixture, []byte{13, 10}, []byte{10}, -1)
+	}
+
+	if string(fixture) != packedFileString {
+		fmt.Println(string(fixture))
+		fmt.Println(packedFileString)
+		t.Fail()
+		return
+	}
+}
