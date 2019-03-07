@@ -28,6 +28,14 @@ func main() {
 	var mewnFiles []string
 	inputs := []string{}
 	if len(os.Args) > 1 {
+		if os.Args[1] == "--help" {
+			fmt.Println()
+			fmt.Println("Mewn is a tool for packing assets into your Go binary. This cli tool generates asset bundles and can also act as a replacement for go build, where it will pack + compile in one step.")
+			fmt.Println()
+			fmt.Println("More information at https://github.com/leaanthony/mewn")
+			fmt.Println()
+			os.Exit(0)
+		}
 		if os.Args[1] == "build" || os.Args[1] == "pack" {
 			buildMode = os.Args[1]
 		} else {
@@ -42,7 +50,6 @@ func main() {
 	}
 	referencedAssets, err := lib.GetReferencedAssets(mewnFiles)
 	if err != nil {
-		fmt.Println("44")
 		log.Fatal(err)
 	}
 
@@ -51,7 +58,6 @@ func main() {
 	for _, referencedAsset := range referencedAssets {
 		packfileData, err := lib.GeneratePackFileString(referencedAsset)
 		if err != nil {
-			fmt.Println(53)
 			log.Fatal(err)
 		}
 		targetFile := filepath.Join(referencedAsset.BaseDir, referencedAsset.PackageName+"-mewn.go")
@@ -82,8 +88,6 @@ func main() {
 		for _, filename := range targetFiles {
 			err := os.Remove(filename)
 			if err != nil {
-				fmt.Println("81")
-
 				log.Fatal(err)
 			}
 		}

@@ -72,6 +72,7 @@ func GeneratePackFileString(assetBundle *ReferencedAssets) (string, error) {
 			}
 			result += fmt.Sprintf("  mewn.AddAsset(\".\",\"%s\",\"%s\")\n", asset.Name, packedData)
 			filesProcessed[fullPath] = true
+			fmt.Printf("Packed: %s\n", fullPath)
 		}
 		result += "}\n"
 	}
