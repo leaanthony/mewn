@@ -11,7 +11,8 @@ import (
 )
 
 func TestPacking(t *testing.T) {
-	mewnFiles := lib.GetMewnFiles("example.go")
+	ignoreErrors := false
+	mewnFiles := lib.GetMewnFiles([]string{"example.go"}, ignoreErrors)
 	if len(mewnFiles) != 1 {
 		t.Fail()
 	}
@@ -26,7 +27,7 @@ func TestPacking(t *testing.T) {
 	}
 
 	theAsset := referencedAssets[0]
-	packedFileString, err := lib.GeneratePackFileString(theAsset)
+	packedFileString, err := lib.GeneratePackFileString(theAsset, ignoreErrors)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +49,8 @@ func TestPacking(t *testing.T) {
 }
 
 func TestEmptyPack(t *testing.T) {
-	mewnFiles := lib.GetMewnFiles("empty.go")
+	ignoreErrors := false
+	mewnFiles := lib.GetMewnFiles([]string{"empty.go"}, ignoreErrors)
 	if len(mewnFiles) != 0 {
 		t.Fail()
 		return
@@ -68,11 +70,39 @@ func TestEmptyPack(t *testing.T) {
 	// No referenced assets so makedummy empty structure
 	referencedAsset := &lib.ReferencedAssets{PackageName: "test"}
 
-	packedFileString, err := lib.GeneratePackFileString(referencedAsset)
+	packedFileString, err := lib.GeneratePackFileString(referencedAsset, ignoreErrors)
 	if err != nil {
 		t.Fatal(err)
 	}
 	fixture, err := ioutil.ReadFile("./fixtures/empty.go.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Fix line endings for fixture
+	if runtime.GOOS == "windows" {
+		fixture = bytes.Replace(fixture, []byte{13, 10}, []byte{10}, -1)
+	}
+
+	if string(fixture) != packedFileString {
+		fmt.Println(string(fixture))
+		fmt.Println(packedFileString)
+		t.Fail()
+		return
+	}
+}
+
+func TestIgnoreErrorPack(t *testing.T) {
+	ignoreErrors := true
+	referencedAsset := &lib.ReferencedAssets{PackageName: "test"}
+	dummyAsset := &lib.ReferencedAsset{AssetPath: "fake/path", Name: "badasset"}
+	referencedAsset.Assets = append(referencedAsset.Assets, dummyAsset)
+	packedFileString, err := lib.GeneratePackFileString(referencedAsset, ignoreErrors)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fixture, err := ioutil.ReadFile("./fixtures/bad.asset.txt")
 	if err != nil {
 		t.Fatal(err)
 	}

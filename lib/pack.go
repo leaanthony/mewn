@@ -26,7 +26,7 @@ func getAllFilesInDirectory(dir string) ([]string, error) {
 }
 
 // GeneratePackFileString creates the contents of a pack file
-func GeneratePackFileString(assetBundle *ReferencedAssets) (string, error) {
+func GeneratePackFileString(assetBundle *ReferencedAssets, ignoreErrors bool) (string, error) {
 
 	// Files processed
 	var filesProcessed = make(map[string]bool)
@@ -45,13 +45,13 @@ func GeneratePackFileString(assetBundle *ReferencedAssets) (string, error) {
 			for _, file := range files {
 				// Read in File
 				packedData, err := CompressFile(file)
-				if err != nil {
+				if err != nil && !ignoreErrors {
 					return "", err
 				}
 				localPath := strings.TrimPrefix(file, group.FullPath+"/")
 				result += fmt.Sprintf("  mewn.AddAsset(\"%s\",\"%s\",\"%s\")\n", group.LocalPath, localPath, packedData)
 				filesProcessed[file] = true
-				fmt.Printf("Packed: %s\n", file)
+				// fmt.Printf("Packed: %s\n", file)
 			}
 		}
 		for _, asset := range assetBundle.Assets {
@@ -67,12 +67,12 @@ func GeneratePackFileString(assetBundle *ReferencedAssets) (string, error) {
 				continue
 			}
 			packedData, err := CompressFile(fullPath)
-			if err != nil {
+			if err != nil && !ignoreErrors {
 				return "", err
 			}
 			result += fmt.Sprintf("  mewn.AddAsset(\".\",\"%s\",\"%s\")\n", asset.Name, packedData)
 			filesProcessed[fullPath] = true
-			fmt.Printf("Packed: %s\n", fullPath)
+			// fmt.Printf("Packed: %s\n", fullPath)
 		}
 		result += "}\n"
 	}

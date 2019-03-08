@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/hex"
-	"fmt"
 	"go/parser"
 	"go/token"
 	"io/ioutil"
@@ -20,7 +19,6 @@ func init() {
 	var err error
 	cwd, err = os.Getwd()
 	if err != nil {
-		fmt.Println("23")
 		log.Fatal(err)
 	}
 }
@@ -48,8 +46,6 @@ func FindGoFiles(directory string) ([]string, error) {
 	err := filepath.Walk(directory,
 		func(path string, info os.FileInfo, err error) error {
 			if err != nil {
-				fmt.Println("50")
-
 				return err
 			}
 			goFilePath := filepath.Ext(path)
@@ -88,7 +84,6 @@ func HasMewnReference(filename string) (bool, error) {
 	fset := token.NewFileSet()
 	node, err := parser.ParseFile(fset, filename, nil, parser.ParseComments)
 	if err != nil {
-		fmt.Println("88")
 		return false, err
 	}
 	for _, imprt := range node.Imports {
@@ -100,7 +95,7 @@ func HasMewnReference(filename string) (bool, error) {
 }
 
 // GetMewnFiles returns a list of files referencing mewn assets
-func GetMewnFiles(args ...string) []string {
+func GetMewnFiles(args []string, ignoreErrors bool) []string {
 
 	var goFiles []string
 	var err error
@@ -108,8 +103,7 @@ func GetMewnFiles(args ...string) []string {
 	if len(args) > 0 {
 		for _, inputFile := range args {
 			inputFile, err = filepath.Abs(inputFile)
-			if err != nil {
-				fmt.Println("108")
+			if err != nil && !ignoreErrors {
 				log.Fatal(err)
 			}
 			goFiles = append(goFiles, inputFile)
@@ -118,8 +112,7 @@ func GetMewnFiles(args ...string) []string {
 	} else {
 		// Find all go files
 		goFiles, err = FindGoFiles(cwd)
-		if err != nil {
-			fmt.Println("117")
+		if err != nil && !ignoreErrors {
 			log.Fatal(err)
 		}
 	}
@@ -129,8 +122,6 @@ func GetMewnFiles(args ...string) []string {
 	for _, goFile := range goFiles {
 		isReferenced, err := HasMewnReference(goFile)
 		if err != nil {
-			fmt.Println("132")
-
 			log.Fatal(err)
 		}
 		if isReferenced {
