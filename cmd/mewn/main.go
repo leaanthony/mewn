@@ -92,8 +92,10 @@ func main() {
 	}
 
 	buildMode := ""
+	buildArgs := []string{}
 	if args.peek() == "build" || args.peek() == "pack" {
 		buildMode = args.pop()
+		buildArgs = args.popAll()
 	}
 
 	mewnFiles := lib.GetMewnFiles(args.popAll(), ignoreErrors)
@@ -121,18 +123,17 @@ func main() {
 
 	if buildMode == "build" || buildMode == "pack" {
 
-		var args []string
+		var cmdargs []string
 
 		if buildMode == "pack" {
-
-			args = append(args, "build")
-			args = append(args, os.Args[2:]...)
-			args = append(args, "-ldflags")
-			args = append(args, "-w -s")
+			cmdargs = append(cmdargs, "build")
+			cmdargs = append(cmdargs, buildArgs...)
+			cmdargs = append(cmdargs, "-ldflags")
+			cmdargs = append(cmdargs, "-w -s")
 		} else {
-			args = append(args, os.Args[1:]...)
+			cmdargs = append(cmdargs, args.popAll()...)
 		}
-		cmd := exec.Command("go", args...)
+		cmd := exec.Command("go", cmdargs...)
 		stdoutStderr, err := cmd.CombinedOutput()
 		if err != nil {
 			fmt.Printf("Error running command: %s\n", stdoutStderr)
