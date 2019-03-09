@@ -125,18 +125,17 @@ func main() {
 
 		var cmdargs []string
 
+		cmdargs = append(cmdargs, "build")
+		cmdargs = append(cmdargs, buildArgs...)
 		if buildMode == "pack" {
-			cmdargs = append(cmdargs, "build")
-			cmdargs = append(cmdargs, buildArgs...)
 			cmdargs = append(cmdargs, "-ldflags")
 			cmdargs = append(cmdargs, "-w -s")
-		} else {
-			cmdargs = append(cmdargs, args.popAll()...)
 		}
 		cmd := exec.Command("go", cmdargs...)
 		stdoutStderr, err := cmd.CombinedOutput()
 		if err != nil {
-			fmt.Printf("Error running command: %s\n", stdoutStderr)
+			fmt.Printf("Error running command! %s\n", err.Error)
+			fmt.Printf("From program: %s\n", stdoutStderr)
 		}
 
 		// Remove target Files
