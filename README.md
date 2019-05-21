@@ -90,3 +90,4 @@ Well, it stands out as a project name (practically zero name clashes) and is one
 ## Inspiration
 
 Heavy inspiration was drawn from [packr](https://github.com/gobuffalo/packr) by the awesome Mark Bates. The scope of what I needed was far narrower than the packr project, thus Mewn was born. If Mewn doesn't fulfil your needs, it's likely that packr will.
+
