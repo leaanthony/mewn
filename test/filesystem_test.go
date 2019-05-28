@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"testing"
 
 	"github.com/leaanthony/mewn/lib"
@@ -16,7 +17,9 @@ func init() {
 	var err error
 	cwd, err = os.Getwd()
 	if err != nil {
-		log.Fatal(err)
+		debug.PrintStack()
+		debug.PrintStack()
+		log.Fatal("Mewn error: " + err.Error())
 	}
 }
 

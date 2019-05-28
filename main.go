@@ -3,6 +3,7 @@ package mewn
 import (
 	"fmt"
 	"log"
+	"runtime/debug"
 
 	"github.com/leaanthony/mewn/lib"
 )
@@ -15,7 +16,9 @@ var err error
 func init() {
 	rootFileGroup, err = mainAssetDirectory.NewFileGroup(".")
 	if err != nil {
-		log.Fatal(err)
+		debug.PrintStack()
+		debug.PrintStack()
+		log.Fatal("Mewn error: " + err.Error())
 	}
 }
 
@@ -45,7 +48,9 @@ func AddAsset(groupName, name, value string) {
 	if fileGroup == nil {
 		fileGroup, err = mainAssetDirectory.NewFileGroup(groupName)
 		if err != nil {
-			log.Fatal(err)
+			debug.PrintStack()
+			debug.PrintStack()
+			log.Fatal("Mewn error: " + err.Error())
 		}
 	}
 	fileGroup.AddAsset(name, value)

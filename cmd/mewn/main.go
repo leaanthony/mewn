@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime/debug"
 
 	"github.com/leaanthony/mewn/lib"
 )
@@ -106,7 +107,8 @@ func main() {
 	}
 	referencedAssets, err := lib.GetReferencedAssets(mewnFiles)
 	if err != nil {
-		log.Fatal(err)
+		debug.PrintStack()
+		log.Fatal("Mewn error: " + err.Error())
 	}
 
 	targetFiles := []string{}
@@ -114,7 +116,8 @@ func main() {
 	for _, referencedAsset := range referencedAssets {
 		packfileData, err := lib.GeneratePackFileString(referencedAsset, ignoreErrors)
 		if err != nil {
-			log.Fatal(err)
+			debug.PrintStack()
+			log.Fatal("Mewn error: " + err.Error())
 		}
 		targetFile := filepath.Join(referencedAsset.BaseDir, referencedAsset.PackageName+"-mewn.go")
 		targetFiles = append(targetFiles, targetFile)
@@ -142,7 +145,8 @@ func main() {
 		for _, filename := range targetFiles {
 			err := os.Remove(filename)
 			if err != nil {
-				log.Fatal(err)
+				debug.PrintStack()
+				log.Fatal("Mewn error: " + err.Error())
 			}
 		}
 	}

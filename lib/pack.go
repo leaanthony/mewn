@@ -27,7 +27,6 @@ func getAllFilesInDirectory(dir string) ([]string, error) {
 
 // GeneratePackFileString creates the contents of a pack file
 func GeneratePackFileString(assetBundle *ReferencedAssets, ignoreErrors bool) (string, error) {
-
 	// Files processed
 	var filesProcessed = make(map[string]bool)
 	// fmt.Printf("Bundling this asset: %+v\n", assetBundle)
@@ -37,6 +36,7 @@ func GeneratePackFileString(assetBundle *ReferencedAssets, ignoreErrors bool) (s
 		result += "import \"github.com/leaanthony/mewn\"\n\n"
 		result += "func init() {\n"
 		for _, group := range assetBundle.Groups {
+			fmt.Printf("Getting files in directory: %s\n", group.FullPath)
 			// Read all assets from the directory
 			files, err := getAllFilesInDirectory(group.FullPath)
 			if err != nil {
@@ -55,14 +55,12 @@ func GeneratePackFileString(assetBundle *ReferencedAssets, ignoreErrors bool) (s
 			}
 		}
 		for _, asset := range assetBundle.Assets {
+
 			groupPath := "."
 			if asset.Group != nil {
 				groupPath = asset.Group.LocalPath
 			}
-			fullPath, err := filepath.Abs(filepath.Join(groupPath, asset.AssetPath))
-			if err != nil {
-				return "", err
-			}
+			fullPath := asset.AssetPath
 			if _, exists := filesProcessed[fullPath]; exists == true {
 				continue
 			}
@@ -70,7 +68,7 @@ func GeneratePackFileString(assetBundle *ReferencedAssets, ignoreErrors bool) (s
 			if err != nil && !ignoreErrors {
 				return "", err
 			}
-			result += fmt.Sprintf("  mewn.AddAsset(\".\", \"%s\", \"%s\")\n", asset.Name, packedData)
+			result += fmt.Sprintf("  mewn.AddAsset(\"%s\", \"%s\", \"%s\")\n", groupPath, asset.Name, packedData)
 			filesProcessed[fullPath] = true
 			// fmt.Printf("Packed: %s\n", fullPath)
 		}

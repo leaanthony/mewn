@@ -5,6 +5,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"log"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -92,8 +93,15 @@ func GetReferencedAssets(filenames []string) ([]*ReferencedAssets, error) {
 							thisAssetBundle.Groups = append(thisAssetBundle.Groups, thisGroup)
 							groups[thisAsset.LHS] = thisGroup
 						case "String", "MustString", "Bytes", "MustBytes":
-							newAsset := &ReferencedAsset{Name: thisAsset.RHS.Path, Group: nil, AssetPath: thisAsset.RHS.Path}
+							fullPath, err := filepath.Abs(filepath.Join(baseDir, thisAsset.RHS.Path))
+							if err != nil {
+								log.Fatal(err)
+							}
+							newAsset := &ReferencedAsset{Name: thisAsset.RHS.Path, Group: nil, AssetPath: fullPath}
 							thisAssetBundle.Assets = append(thisAssetBundle.Assets, newAsset)
+							// if strings.Index(fullPath, "runtime") != -1 {
+							// 	log.Fatalf("%+v", newAsset)
+							// }
 						default:
 							err = fmt.Errorf("unknown call to mewn.%s", thisAsset.RHS.Method)
 							return false

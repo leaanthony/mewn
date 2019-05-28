@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 )
 
@@ -19,7 +20,8 @@ func init() {
 	var err error
 	cwd, err = os.Getwd()
 	if err != nil {
-		log.Fatal(err)
+		debug.PrintStack()
+		log.Fatal("Mewn error: " + err.Error())
 	}
 }
 
@@ -104,7 +106,9 @@ func GetMewnFiles(args []string, ignoreErrors bool) []string {
 		for _, inputFile := range args {
 			inputFile, err = filepath.Abs(inputFile)
 			if err != nil && !ignoreErrors {
-				log.Fatal(err)
+				debug.PrintStack()
+				debug.PrintStack()
+				log.Fatal("Mewn error: " + err.Error())
 			}
 			goFiles = append(goFiles, inputFile)
 		}
@@ -113,7 +117,9 @@ func GetMewnFiles(args []string, ignoreErrors bool) []string {
 		// Find all go files
 		goFiles, err = FindGoFiles(cwd)
 		if err != nil && !ignoreErrors {
-			log.Fatal(err)
+			debug.PrintStack()
+			debug.PrintStack()
+			log.Fatal("Mewn error: " + err.Error())
 		}
 	}
 
@@ -122,7 +128,9 @@ func GetMewnFiles(args []string, ignoreErrors bool) []string {
 	for _, goFile := range goFiles {
 		isReferenced, err := HasMewnReference(goFile)
 		if err != nil {
-			log.Fatal(err)
+			debug.PrintStack()
+			debug.PrintStack()
+			log.Fatal("Mewn error: " + err.Error())
 		}
 		if isReferenced {
 			mewnFiles = append(mewnFiles, goFile)
