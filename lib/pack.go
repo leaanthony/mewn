@@ -49,7 +49,7 @@ func GeneratePackFileString(assetBundle *ReferencedAssets, ignoreErrors bool) (s
 					return "", err
 				}
 				localPath := strings.TrimPrefix(file, group.FullPath+"/")
-				result += fmt.Sprintf("  mewn.AddAsset(\"%s\", \"%s\", \"%s\")\n", group.LocalPath, localPath, packedData)
+				result += fmt.Sprintf("  mewn.AddAsset(\"%s\", %q, \"%s\")\n", group.LocalPath, localPath, packedData)
 				filesProcessed[file] = true
 				// fmt.Printf("Packed: %s\n", file)
 			}

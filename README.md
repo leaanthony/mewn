@@ -39,8 +39,8 @@ Import mewn at the top of your file `github.com/leaanthony/mewn` then use the si
 
 - `String(filename) (string)` - loads the file and returns it as a string
 - `Bytes(filename) ([]byte)` - loads the file and returns it as a byte slice
-- `MustString(filename) (string, error)` - loads the file and returns it as a string. Error indicates an issue
-- `MustBytes(filename) ([]byte, error)` - loads the file and returns it as a byte slice. Error indicates an issue
+- `MustString(filename) (string)` - loads the file and returns it as a string. Any error is considered fatal
+- `MustBytes(filename) ([]byte)` - loads the file and returns it as a byte slice. Any error is considered fatal
 
 ### Groups
 
