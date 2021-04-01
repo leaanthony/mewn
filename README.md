@@ -1,5 +1,7 @@
 # Mewn
 
+<h2>This project is now being archived due to native embed functionality now available in Go</h2>
+
 A zero dependency asset embedder for Go.
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/leaanthony/mewn)](https://goreportcard.com/report/github.com/leaanthony/mewn) [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/leaanthony/mewn) [![CodeFactor](https://www.codefactor.io/repository/github/leaanthony/mewn/badge)](https://www.codefactor.io/repository/github/leaanthony/mewn) ![](https://img.shields.io/bower/l/svg)
